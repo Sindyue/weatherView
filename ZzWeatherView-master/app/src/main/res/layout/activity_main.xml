@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<me.zhouzhuo.zzweather.view.ScrollViewWithRecycler xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.zhouzhuo.zzweather.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:id="@+id/rg_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <RadioButton
+                android:id="@+id/rb_disc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="折线图"
+                android:textSize="40px" />
+
+            <RadioButton
+                android:id="@+id/rb_curve"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="曲线图"
+                android:textSize="40px" />
+        </RadioGroup>
+
+        <me.zhouzhuo.zzweatherview.ZzWeatherView
+            android:id="@+id/weather_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#333"
+            android:scrollbarSize="4dp"
+            android:scrollbarThumbHorizontal="@drawable/scroll_bar_thumb"
+            android:scrollbarTrackHorizontal="@drawable/scroll_bar_thumb"
+            android:visibility="gone" />
+
+        <me.zhouzhuo.zzweatherview.ZzWeatherViewSimple
+            android:id="@+id/weather_simple_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#333"
+            android:scrollbarSize="4dp"
+            android:scrollbarThumbHorizontal="@drawable/scroll_bar_thumb"
+            android:scrollbarTrackHorizontal="@drawable/scroll_bar_thumb" />
+
+
+        <me.zhouzhuo.zzweather.view.MiuiScrollView
+            android:id="@+id/miui_weather_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbarSize="2dp"
+            android:scrollbarThumbHorizontal="@drawable/scroll_bar_thumb"
+            android:scrollbarTrackHorizontal="@drawable/scroll_bar_thumb">
+
+            <me.zhouzhuo.zzweather.view.MiuiWeatherView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                app:background_color="#ffffff"
+                app:line_interval="60dp"
+                app:min_point_height="60dp" />
+        </me.zhouzhuo.zzweather.view.MiuiScrollView>
+
+    </LinearLayout>
+
+</me.zhouzhuo.zzweather.view.ScrollViewWithRecycler>
