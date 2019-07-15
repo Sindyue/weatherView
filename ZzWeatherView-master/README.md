@@ -1,19 +1,16 @@
 # ZzWeatherView
 
 
-一个显示天气的控件
+一个显示天气的控件，大致实现小米和墨迹天气的初版
 
 
-## Gradle
-
-```
-compile 'me.zhouzhuo.zzweatherview:zz-weather-view:1.0.2'
-```
+1. 引用组件 MiuiWeatherView 或者 MojiWeatherView ，为了连贯滑动性，在该组件外嵌套一个水平的 ScrollView ，并将相关滑动距离传至子控件中；
+2. 参考 MiuiWeatherView 的实现，直接在组件中监听事件滑动，也能实现惯性滑动，不过该组件被嵌套在垂直的 ScrollView 中时，滑动不够连贯，详情自己可通过事件看出
 
 
-效果图如下：
+MojiWeatherView 效果图如下：
 
-<img src="https://github.com/zhouzhuo810/ZzWeatherView/blob/master/art/zzweatherview_curve.gif"  width="400px"/>
+<img src="https://github.com/Sindyue/weatherView/blob/master/ZzWeatherView-master/art/device-2019-07-15-135248.png"  width="400px"/>
 
 ## 用法简介
 
@@ -33,16 +30,22 @@ compile 'me.zhouzhuo.zzweatherview:zz-weather-view:1.0.2'
 
 
 ```xml
-    <me.zhouzhuo.zzweatherview.ZzWeatherView
-        android:id="@+id/weather_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbarThumbHorizontal="@drawable/scroll_bar_thumb"
-        android:scrollbarTrackHorizontal="@drawable/scroll_bar_thumb"
-        android:scrollbarSize="4dp"
-        android:background="#333"
-        >
-    </me.zhouzhuo.zzweatherview.ZzWeatherView>
+      <me.zhouzhuo.zzweather.view.MiuiScrollView
+            android:id="@+id/miui_weather_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbarSize="2dp"
+            android:scrollbarThumbHorizontal="@drawable/scroll_bar_thumb"
+            android:scrollbarTrackHorizontal="@drawable/scroll_bar_thumb">
+
+            <me.zhouzhuo.zzweather.view.MiuiWeatherView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                app:background_color="#ffffff"
+                app:line_interval="60dp"
+                app:min_point_height="60dp" />
+        </me.zhouzhuo.zzweather.view.MiuiScrollView>
 
 ```
 
@@ -51,64 +54,30 @@ compile 'me.zhouzhuo.zzweatherview:zz-weather-view:1.0.2'
 
 
 ```java
-        ZzWeatherView weatherView = (ZzWeatherView) findViewById(R.id.weather_view);
+        MiuiScrollView miuiWeatherView = (MiuiScrollView) findViewById(R.id.miui_weather_view);
 
         //填充天气数据
-        weatherView.setList(generateData());
-
-        //画折线
-        weatherView.setLineType(ZzWeatherView.LINE_TYPE_DISCOUNT);
-        //画曲线
-        //weatherView.setLineType(ZzWeatherView.LINE_TYPE_CURVE);
-
-        //设置线宽
-        weatherView.setLineWidth(6f);
-
-
-        //设置一屏幕显示几列(最少3列)
-        try {
-            weatherView.setColumnNumber(5);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //设置白天和晚上线条的颜色
-        weatherView.setDayAndNightLineColor(Color.BLUE, Color.RED);
-
-
-        //点击某一列
-        weatherView.setOnWeatherItemClickListener(new ZzWeatherView.OnWeatherItemClickListener() {
-            @Override
-            public void onItemClick(WeatherItemView itemView, int position, WeatherModel weatherModel) {
-                Toast.makeText(MainActivity.this, position+"", Toast.LENGTH_SHORT).show();
-            }
-        });
-       
+        miuiWeatherView.setData(generateData2(), this);
         
+        //数据源
+       private List<WeatherBean> generateData2() {
+            List<WeatherBean> data = new ArrayList<>();
+            //add your WeatherBean to data
+            WeatherBean b1;
+            int tempture = 20;
+            String weather;
+            for (int i = 0; i < 25; i++) {
+                if (i < 12) {
+                    tempture = tempture + 2;
+                } else {
+                    tempture = tempture - 3;
+                }
+
+                weather = (i % 4 == 0) ? WeatherBean.RAIN : WeatherBean.SUN;
+                b1 = new WeatherBean(weather, tempture, i + ":00");
+                data.add(b1);
+            }
+            return data;
+        }
 ```
 
-```java
-    //数据源
-  WeatherModel model = new WeatherModel();
-        model.setDate("12/07");//日期
-        model.setWeek("昨天");  //星期
-        model.setDayWeather("大雪"); //白天天气
-        model.setDayTemp(11); //白天温度
-        model.setNightTemp(5); //夜晚温度
-        model.setNightWeather("晴"); //夜晚天气
-        model.setWindOrientation("西南风"); //风向
-        model.setWindLevel("3级"); //风级
-        model.setAirLevel(AirLevel.EXCELLENT); //空气质量
-        model.setDayPic(R.drawable.xxx); //白天天气图标(默认提供常用天气图标)
-        model.setNightPic(R.drawable.xxx); //晚上天气图标(默认提供常用天气图标)
-```
-
-
-### 更新日志
-
-v 1.0.2
-- 添加设置曲线颜色方法；
-- 添加设置列的数量方法；
-
-v 1.0.1
-- 修复曲线不圆滑问题；
